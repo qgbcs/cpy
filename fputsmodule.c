@@ -1,5 +1,19 @@
-#include <Python.h>
+#include <stdio.h>
+#include <time.h>
 
+int main ()
+{
+  time_t rawtime;
+  struct tm * timeinfo;
+
+  time ( &rawtime );
+  timeinfo = localtime ( &rawtime );
+  printf ( "Current local time and date: %s", asctime (timeinfo) );
+  
+  return 0;
+}
+
+#include <Python.h>
 static PyObject *method_fputs(PyObject *self, PyObject *args) {
     char *str, *filename = NULL;
     int bytes_copied = -1;
