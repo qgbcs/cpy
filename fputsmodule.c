@@ -17,8 +17,21 @@ static PyObject *method_fputs(PyObject *self, PyObject *args) {
 }
 
 
+static PyObject * method_system(PyObject *self, PyObject *args)
+{
+    const char *command;
+    int sts;
+
+    if (!PyArg_ParseTuple(args, "s", &command))
+        return NULL;
+    sts = system(command);
+    return PyLong_FromLong(sts);
+}
+
+
 static PyMethodDef FputsMethods[] = {
-    {"fputs", method_fputs, METH_VARARGS, "Python interface for fputs C library function"},
+    {"fputs" , method_fputs , METH_VARARGS, "Python interface for fputs C library function"},
+    {"system", method_system, METH_VARARGS, "os system"},
     {NULL, NULL, 0, NULL}
 };
 
