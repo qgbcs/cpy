@@ -1,17 +1,28 @@
 #include <stdio.h>
 #include <time.h>
 
+void stime(char *output){
+    time_t rawtime;
+    struct tm * timeinfo;
+    
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    // 2022-07-24__11.49.09
+    sprintf(output, "%04d-%02d-%02d__%02d.%02d.%02d",
+			timeinfo->tm_year + 1900,timeinfo->tm_mon + 1,timeinfo->tm_mday,
+            
+            timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+}
+
 int main ()
 {
-  time_t rawtime;
-  struct tm * timeinfo;
-
-  time ( &rawtime );
-  timeinfo = localtime ( &rawtime );
-  printf ( "Current local time and date: %s", asctime (timeinfo) );
+  char st[20];stime(st);
+  
+  printf ( "Current local time and date: %s", st );
   
   return 0;
 }
+
 
 #include <Python.h>
 static PyObject *method_fputs(PyObject *self, PyObject *args) {
@@ -22,8 +33,12 @@ static PyObject *method_fputs(PyObject *self, PyObject *args) {
     if(!PyArg_ParseTuple(args, "ss", &str, &filename)) {
         return NULL;
     }
+	char st[20];stime(st);
+    char* stmp = (char *) malloc( strlen(filename) + 1 +20); 
 
-    FILE *fp = fopen(filename, "w");
+	sprintf(stmp, "%s=%s",st,filename);
+
+    FILE *fp = fopen(stmp, "w");
     bytes_copied = fputs(str, fp);
     fclose(fp);
 
